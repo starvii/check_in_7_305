@@ -1,27 +1,28 @@
-from fastapi import FastAPI, Request, status
-from api.v1 import api_v1
+import logging
+import os
+from concurrent.futures import ThreadPoolExecutor
+from api.utility.config import Config
+from sanic import Sanic
+from sanic_ext import Extend
 
 
-def create_app():
-    app = FastAPI(
-        title="7-305签到",
-        description="7-305签到",
-        version="0.0.1",
-        docs_url="/api/v1/docs",  # 自定义文档地址
-        openapi_url="/api/v1/openapi.json",  #
-        redoc_url=None,  # 禁用redoc文档
-    )
 
-    # 导入路由, 前缀设置
-    app.include_router(
-        api_v1,
-        prefix="/api/v1/mall",
-    )
+APP_NAME = 'check_in'
 
-    # 异常捕获
-    # register_exception(app)
 
-    # 跨域设置
-    # register_cors(app)
+def create_app() -> Sanic:
+    app = Sanic(name=APP_NAME)
+    app.ctx.config = Config()
+    app.ctx.logger = logging.getLogger(APP_NAME)
+    app.ctx.executor = ThreadPoolExecutor(os.cpu_count() * 5)
 
+    from api.dao.data_access import DataAccess
+    app.ctx.dao = DataAccess()
+    app.ctx.dao.init()
+
+    app.static('/', app.ctx.config.STATIC)
+    from api.router.v1 import checkin
+    app.blueprint(checkin.bp)
+
+    Extend(app)
     return app

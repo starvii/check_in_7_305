@@ -133,3 +133,10 @@ dmypy.json
 # idea
 .vscode
 .idea
+
+# web
+dist
+
+# database
+*.sqlite
+*.sqlite-*
