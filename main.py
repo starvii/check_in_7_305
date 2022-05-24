@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-运行命令：
-uvicorn main:app --port=8000
+打包命令（打包后无法运行）：
+pyinstaller -F main.py -p api -p venv\Lib\site-packages
 """
 import os
 
