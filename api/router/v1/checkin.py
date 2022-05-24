@@ -66,7 +66,9 @@ async def checkin_action(request: Request, position: str):
             if last_insert_rowid <= 0:
                 return json(dict(code=-5, message='数据写入失败'))
         except Exception as e:
-            logger.error('%s: %s', type(e), e)
+            ''' pos=%s,name=%s,code=%s,ip=%s,mac=%s - %s: %s '''
+            logger.error('pos=(%s),name=%s,code=%s,ip=%s,mac=%s\n%s: %s',
+                         position, name, code, arp.ip, arp.mac, type(e), e)
             return json(dict(code=1, message='已签到'))
         return json(dict(code=0, message='ok'))
     except Exception as e:

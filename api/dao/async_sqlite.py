@@ -57,7 +57,7 @@ class AsyncSqlite(Process):
         self.journal_mode: str = journal_mode
         # use request queue of unlimited size
         self.reqs: Queue[AsyncQuery] = Queue()
-        self.setDaemon(True)  # python2.5-compatible
+        # self.setDaemon(True)  # python2.5-compatible
         self.start()
 
     def run(self):
