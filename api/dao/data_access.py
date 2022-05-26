@@ -170,7 +170,7 @@ create table if not exists `classmate`(
 
 BEGIN;
 insert or replace into `classroom`
-values(1, '7-305', 8, 6, '');
+values(1, '7-305', 8, 7, '');
 '''
         s = [s.strip() for s in sql.split(';') if len(s.strip()) > 0]
         for _sql in s:

@@ -24,7 +24,7 @@ def create_app() -> Sanic:
     app.static('/', app.ctx.config.STATIC, stream_large_files=True)
     app.static('/', str(Path(app.ctx.config.STATIC).joinpath('index.html')), stream_large_files=True)
 
-    from api.router.v1 import checkin
+    from api.controller.v1 import checkin
     app.blueprint(checkin.bp)
 
     Extend(app)
