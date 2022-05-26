@@ -1,8 +1,10 @@
-from subprocess import Popen, PIPE
 import re
-from typing import List, Dict
 import socket
 import struct
+from subprocess import Popen, PIPE
+from typing import List, Dict
+
+from .codes import decode
 
 
 class ARP:
@@ -27,19 +29,19 @@ def get_ip_mac() -> Dict[str, ARP]:
         _buf: List[ARP] = []
         for _l in _lines:
             _a = re.split(r'\s+', _l)
-            if _a[0] == 'Interface:':
+            if _a[0] in {'Interface:', '接口:'}:
                 _net_card = (_a[1], int(_a[3], 16))
             elif _a[0] == 'Internet':
                 continue
             elif re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', _a[0]):
-                _arp = ARP(_net_card[0], _net_card[1], _a[0], _a[1], _a[2] == 'dynamic')
+                _arp = ARP(_net_card[0], _net_card[1], _a[0], _a[1], _a[2] in {'dynamic', '动态'})
                 _buf.append(_arp)
         return _buf
 
     cmd = 'arp -a'
     proc = Popen(cmd, shell=True, stdout=PIPE)
     out: bytes = proc.stdout.read()
-    lines = [line.strip() for line in out.decode().split('\n')
+    lines = [line.strip() for line in decode(out).split('\n')
              if len(line.strip()) > 0]
     arps = deal(lines)
     return {x.ip: x for x in arps}

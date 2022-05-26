@@ -36,22 +36,10 @@ async def checkin_result(request: Request):
     ))
 
 
-def decode(stream: bytes) -> str:
-    codes = ('utf8', 'cp936', 'gbk')
-    for code in codes:
-        try:
-            ret = stream.decode(code)
-            return ret
-        except Exception as e:
-            _ = e
-
-
 @bp.post('/checkin/<position>')
 async def checkin_action(request: Request, position: str):
     try:
-        body = decode(request.body)
-        req_data = sys_json.loads(body)
-        # req_data = request.json
+        req_data = request.json
         name = req_data['name']
         code = req_data['code']
         x, y = [int(t) for t in position.split(',') if t.strip().isdigit()]

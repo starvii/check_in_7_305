@@ -19,14 +19,14 @@ class CursorState:
 
 
 class Command(Enum):
-    Close = 0x00
-    Commit = 0x01
-    RollBack = 0x02
-    NoMore = 0x03
-    Execute = 0x11
-    ExecuteMany = 0x12
-    SelectOne = 0x21
-    Select = 0x22
+    Close = 0b00000000
+    Commit = 0b00000001
+    RollBack = 0b00000010
+    NoMore = 0b00000100
+    Execute = 0b00010000
+    ExecuteMany = 0b00010001
+    SelectOne = 0b00100000
+    Select = 0b00100001
 
 
 class AsyncQuery:

@@ -168,7 +168,7 @@ create table if not exists `classmate`(
     `class_id` integer
 );
 
-BEGIN;
+--BEGIN; -- 注意，sqlite不开启自动提交时，不能使用begin/commit语句，只能使用conn.commit()
 insert or replace into `classroom`
 values(1, '7-305', 8, 7, '');
 '''
@@ -241,7 +241,7 @@ values(1, '7-305', 8, 7, '');
                             '''
         ip = ip2int(arp.ip)
         mac = arp.mac
-        self.db_thread.execute('begin;')
+        # self.db_thread.execute('begin;') # 注意，sqlite不开启自动提交时，不能使用begin/commit语句，只能使用conn.commit()
         c: CursorState = self.db_thread.execute(sql, (code, today, ip, mac, x, y))
         self.db_thread.commit()
         return c.last_row_id
